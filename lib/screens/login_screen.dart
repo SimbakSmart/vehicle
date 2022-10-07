@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:http/http.dart' as http;
+import 'package:vehicle/helpers/constants.dart';
 class LoginScreen extends StatefulWidget {
   LoginScreen();
 
@@ -198,10 +202,28 @@ Widget _showLoginButton() {
     return hasErrors;
   }
 
-  void _login(){
+  Future<void> _login() async {
     if(!_validateFields()) {
       return;
     }
+
+
+    Map<String, dynamic> request = {
+      'userName': _email,
+      'password': _password,
+    };
+
+    var url = Uri.parse('${Constans.apiUrl}/api/Account/CreateToken');
+    var response = await http.post(
+      url,
+      headers: {
+        'content-type' : 'application/json',
+        'accept' : 'application/json',
+      },
+      body: jsonEncode(request),
+    );
+
+    print(response.body);
   }
 
 }
