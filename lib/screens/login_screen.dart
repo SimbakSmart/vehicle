@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:http/http.dart' as http;
+import 'package:vehicle/components/oader_component.dart';
 import 'package:vehicle/helpers/constants.dart';
+import 'package:vehicle/models/token.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen();
@@ -26,23 +28,30 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _rememberme = true;
   bool _passwordShow = false;
 
+  bool _showLoader = false;
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(height: 40),
-            _showLogo(),
-            SizedBox(height: 20),
-            _showEmail(),
-            _showPassword(),
-            _showRememberme(),
-            _showButtons()
-          ],
-        ),
+      body: Stack(
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(height: 40),
+              _showLogo(),
+              SizedBox(height: 20),
+              _showEmail(),
+              _showPassword(),
+              _showRememberme(),
+              _showButtons()
+            ],
+          ),
+          _showLoader
+              ? LoaderComponent(text: 'Por favor espere...')
+              : Container(),
+        ],
       ),
     );
   }
@@ -201,6 +210,10 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
+    setState(() {
+      _showLoader = true;
+    });
+
     Map<String, dynamic> request = {
       'userName': _email,
       'password': _password,
@@ -216,6 +229,21 @@ class _LoginScreenState extends State<LoginScreen> {
       body: jsonEncode(request),
     );
 
-    print("ANSWER : " + response.body);
+    setState(() {
+      _showLoader = false;
+    });
+
+    if (response.statusCode >= 400) {
+      setState(() {
+        _passwordShow = true;
+        _passwordError = "Email o contrasena incorrecta";
+      });
+    } else {
+      var body = response.body;
+      var decodedJson = jsonDecode(body);
+      var token = Token.fromJson(decodedJson);
+
+      print(token.token);
+    }
   }
 }
