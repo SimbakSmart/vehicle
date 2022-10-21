@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vehicle/home_page.dart';
+import 'package:vehicle/screens/home_page.dart';
 import 'package:vehicle/screens/login_screen.dart';
 
 class MyApp extends StatelessWidget {
@@ -17,6 +17,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
-

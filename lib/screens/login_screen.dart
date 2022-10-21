@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:vehicle/components/oader_component.dart';
 import 'package:vehicle/helpers/constants.dart';
 import 'package:vehicle/models/token.dart';
+import 'package:vehicle/screens/home_page.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen();
@@ -243,7 +244,8 @@ class _LoginScreenState extends State<LoginScreen> {
       var decodedJson = jsonDecode(body);
       var token = Token.fromJson(decodedJson);
 
-      print(token.token);
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => HomePage(token: token)));
     }
   }
 }
