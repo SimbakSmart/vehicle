@@ -1,6 +1,5 @@
+class Constans {
+  // static String get apiUrl => "https://10.0.0.2:5001/";
 
-
-class Constans{
-
-  static String get apiUrl=>"https://localhost:5001/api/Account/CreateToken";
+  static String get apiUrl => "http://172.16.155.127/vehicles/";
 }
